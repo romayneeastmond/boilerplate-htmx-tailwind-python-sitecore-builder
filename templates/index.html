@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -10,16 +10,41 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.1/styles/default.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.1/styles/default.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.1/highlight.min.js"></script>
     <script>
-        function highlightResponse() {
+        tailwind.config = {
+            darkMode: "selector"
+        }
+
+        const highlightResponse = () => {
             $("#output").removeClass("hidden");
 
             hljs.highlightBlock($("#response-component > code").get(0));
             hljs.highlightBlock($("#response-query > code").get(0));
+        }
+
+        const toggleDarkMode = (enabled) => {
+            if (enabled === true) {
+                $("html").addClass("dark");
+            } else {
+                $("html").removeClass("dark");
+            }
+        }
+
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", event => {
+            if (event.matches === "dark") {
+                $("html").addClass("dark");
+            } else {
+                $("html").removeClass("dark");
+            }
+        });
+
+        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            $("html").addClass("dark");
         }
     </script>
 
@@ -31,35 +56,34 @@
             padding: 0 !important;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .hljs {
-                color: #9ca3af;
-            }
+        .dark .hljs {
+            color: #9ca3af;
+        }
 
-            .hljs-deletion,
-            .hljs-number,
-            .hljs-quote,
-            .hljs-selector-class,
-            .hljs-selector-id,
-            .hljs-string,
-            .hljs-template-tag,
-            .hljs-type,
-            .hljs-section,
-            .hljs-title {
-                color: #ffa27f;
-            }
+        .dark .hljs-deletion,
+        .dark .hljs-number,
+        .dark .hljs-quote,
+        .dark .hljs-selector-class,
+        .dark .hljs-selector-id,
+        .dark .hljs-string,
+        .dark .hljs-template-tag,
+        .dark .hljs-type,
+        .dark .hljs-section,
+        .dark .hljs-title {
+            color: #ffa27f;
+        }
 
-            .hljs-addition,
-            .hljs-built_in,
-            .hljs-bullet,
-            .hljs-code {
-                color: #5fb23b;
-            }
+        .dark .hljs-addition,
+        .dark .hljs-built_in,
+        .dark .hljs-bullet,
+        .dark .hljs-code {
+            color: #5fb23b;
         }
     </style>
 </head>
 
 <body class="bg-gray-100 flex flex-col min-h-screen overflow-y-scroll dark:dark:bg-zinc-800">
+    <button class="absolute top-0 right-0 m-4 top-10 lg:top-0 md:top-0 sm:top-0 dark:hidden" hx-post="/submit-night-mode" hx-on::before-request="toggleDarkMode(true);" hx-swap="outerHTML"><i class="fas fa-moon"></i></button>
     <header class="p-2 px-4">
         <h1 class="font-bold text-2xl dark:text-white">HTMX, Tailwind CSS &amp; Sitecore XM Cloud Boilerplate</h1>
     </header>

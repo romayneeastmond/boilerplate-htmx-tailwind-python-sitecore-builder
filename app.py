@@ -9,7 +9,15 @@ def index():
 
 @app.route('/hello-world')
 def hello_world():
-    return "<div class='text-green-500'>Hello from the server!</div>"
+    return """<div class="text-green-500">Hello from the server!</div>"""
+
+@app.route('/submit-blind-mode', methods=['POST'])
+def submit_blind_mode():
+    return """<button class="absolute m-4 right-0 top-10 lg:top-0 md:top-0 sm:top-0" hx-post="/submit-night-mode" hx-on::before-request="toggleDarkMode(true);" hx-swap="outerHTML"><i class="fas fa-moon"></i></button>"""
+
+@app.route('/submit-night-mode', methods=['POST'])
+def submit_night_mode():
+    return """<button class="absolute m-4 right-0 top-10 lg:top-0 md:top-0 sm:top-0: text-white" hx-post="/submit-blind-mode" hx-on::before-request="toggleDarkMode(false);" hx-swap="outerHTML"><i class="fas fa-sun"></i></button>"""
 
 @app.route('/submit-form', methods=['POST'])
 def submit_form():
