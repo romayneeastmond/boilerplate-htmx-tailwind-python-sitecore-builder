@@ -53,7 +53,7 @@ export const Default = (props: """ + name + """Props): JSX.Element => {
     }
     
     const id = props.rendering?.uid;
-    const fields = props.rendering?.fields;
+    const fields = sitecoreContext?.route?.fields;
 
     const renderingFields = {
 """ + process_values_rendering_fields(values) + """

@@ -37,6 +37,6 @@ All terms used are copyright to their original authors.
 
 ## Live Demo
 
-Live demo hosted in Microsoft Azure, PHP 7.4 App Service [Boilerplate Sitecore XM Cloud Component Builder](https://dev-python-boilerplate-sitecore.azurewebsites.net/).
+Live demo hosted in Microsoft Azure App Service [Boilerplate Sitecore XM Cloud Component Builder](https://dev-python-boilerplate-sitecore.azurewebsites.net/).
 
 Azure F1 instances are :snowflake: ice cold. That first load will need some :sun_with_face: warming up.
