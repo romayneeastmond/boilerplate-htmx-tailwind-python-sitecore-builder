@@ -7,10 +7,14 @@ from process_form_values import process_values_sitecore_renderings
 
 def get_sitecore_components(name, values, hook):
     text = """
-        <div class="border bg-gray-100 mt-2 rounded-md text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white">
+        <div class="border bg-gray-100 mt-2 relative rounded-md text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white">
             <h6 class="border-b border-gray-200 font-bold p-3 dark:border-zinc-700">
                 Sitecore XM Cloud Component
-            </h6>            
+            </h6>
+            
+            <button onclick="copyTextToClipboard('#response-component')" class="absolute top-2 right-2 text-gray-500 text-sm px-3 py-1 rounded dark:text-white">
+                <i class="fas fa-copy"></i>
+            </button>            
             
             <pre id="response-component" class="-mb-7 -mt-4 px-4">
                 <code class="typescript">
@@ -80,10 +84,14 @@ export const Default = (props: """ + name + """Props): JSX.Element => {
             </pre>            
         </div>
         
-        <div class="border bg-gray-100 mt-4 rounded-md text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white">            
+        <div class="border bg-gray-100 mt-4 relative rounded-md text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white">            
             <h6 class="border-b border-gray-200 font-bold p-3 dark:border-zinc-700">
                 GraphQL Definition
             </h6>
+            
+            <button onclick="copyTextToClipboard('#response-query')" class="absolute top-2 right-2 text-gray-500 text-sm px-3 py-1 rounded dark:text-white">
+                <i class="fas fa-copy"></i>
+            </button>             
             
             <pre id="response-query" class="-mb-7 -mt-4 px-4">
                 <code class="graphql">

@@ -33,6 +33,22 @@
             } else {
                 $("html").removeClass("dark");
             }
+
+            localStorage.setItem("htmx-sitecore-darkMode", enabled);
+        }
+
+        const copyTextToClipboard = (elementId) => {
+            const text = $(elementId).html()
+                .replace(/<[^>]*>/g, '')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&amp;/g, '&');
+
+            navigator.clipboard.writeText(text.trim()).then(() => {
+                console.log('Copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
         }
 
         window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", event => {
@@ -46,6 +62,15 @@
         if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
             $("html").addClass("dark");
         }
+
+        $(document).ready(function () {
+            if (localStorage.getItem("htmx-sitecore-darkMode") === "true") {
+                $("html").addClass("dark");
+
+                $("#dark-mode-button").addClass("hidden");
+                $("#light-mode-button").removeClass("hidden");
+            }
+        });        
     </script>
 
     <style>
@@ -83,7 +108,8 @@
 </head>
 
 <body class="bg-gray-100 flex flex-col min-h-screen overflow-y-scroll dark:dark:bg-zinc-800">
-    <button class="absolute top-0 right-0 m-4 top-10 lg:top-0 md:top-0 sm:top-0 dark:hidden" hx-post="/submit-night-mode" hx-on::before-request="toggleDarkMode(true);" hx-swap="outerHTML"><i class="fas fa-moon"></i></button>
+    <button id="dark-mode-button" class="absolute top-0 right-0 m-4 top-10 lg:top-0 md:top-0 sm:top-0" hx-post="/submit-night-mode" hx-on::before-request="toggleDarkMode(true);" hx-swap="outerHTML"><i class="fas fa-moon"></i></button>
+    <button id="light-mode-button" class="hidden absolute top-0 right-0 m-4 top-10 lg:top-0 md:top-0 sm:top-0 dark:text-white" hx-post="/submit-blind-mode" hx-on::before-request="toggleDarkMode(false);" hx-swap="outerHTML"><i class="fas fa-sun"></i></button>
     <header class="p-2 px-4">
         <h1 class="font-bold text-2xl dark:text-white">HTMX, Tailwind CSS &amp; Sitecore XM Cloud Boilerplate</h1>
     </header>
