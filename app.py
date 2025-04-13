@@ -23,11 +23,12 @@ def submit_night_mode():
 def submit_form():
     name = request.form.get('name')
     values = request.form.get('values')
+    hook = request.form.get('hook')
     
     if not name or not values:
        return """<div class="text-red-600 text-sm dark: text-red-800">Component Name and Component Fields are required.</div>"""
 
-    return get_sitecore_components(name, values)
+    return get_sitecore_components(name, values, hook)
     
 if __name__ == '__main__':
     app.run(debug=True)

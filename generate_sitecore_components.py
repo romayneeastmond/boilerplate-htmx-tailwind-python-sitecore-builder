@@ -5,8 +5,8 @@ from process_form_values import process_values_component_parameters
 from process_form_values import process_values_graphql_fields
 from process_form_values import process_values_sitecore_renderings
 
-def get_sitecore_components(name, values):
-    return """
+def get_sitecore_components(name, values, hook):
+    text = """
         <div class="border bg-gray-100 mt-2 rounded-md text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white">
             <h6 class="border-b border-gray-200 font-bold p-3 dark:border-zinc-700">
                 Sitecore XM Cloud Component
@@ -16,8 +16,8 @@ def get_sitecore_components(name, values):
                 <code class="typescript">
 import React from 'react';
 import { 
-    ComponentParams, ComponentRendering, DateField, File, FileField, Image, Link, LinkField, Text, TextField, 
-    RichText, RichTextField, useSitecoreContext 
+    ComponentParams, ComponentRendering, DateField, File, FileField,[hook_import1] Image, Link, LinkField, Text, TextField, 
+    RichText, RichTextField, useSitecoreContext[hook_import2] 
 } from '@sitecore-jss/sitecore-jss-nextjs';
 
 type """ + name + """Props = {
@@ -28,7 +28,7 @@ type """ + name + """Props = {
 type ComponentContentProps = {
     id: string;
     mode?: string;
-    children?: JSX.Element;
+    children?: JSX.Element;[hook_component_prop]
 """ + process_values_props(values) + """
 }
 
@@ -39,11 +39,11 @@ const ComponentContent = (props: ComponentContentProps): JSX.Element => {
         &lt;/div&gt;
     );
 };
-
+[hook_definition]
 export const Default = (props: """ + name + """Props): JSX.Element => {
     const { sitecoreContext } = useSitecoreContext();
-
-    if (!props.rendering && !sitecoreContext?.route?.fields?.Content) {
+    [hook_definition_external]
+    if (!props.rendering && !sitecoreContext?.route?.fields) {
         return (
             &lt;div className='text-red-600 text-sm'&gt;
                 """ + name + """ rendering requires a data source.
@@ -53,7 +53,10 @@ export const Default = (props: """ + name + """Props): JSX.Element => {
     }
     
     const id = props.rendering?.uid;
-    const fields = sitecoreContext?.route?.fields;
+    const fields = sitecoreContext?.route?.fields; 
+    
+    // const contextFields = sitecoreContext?.route?.fields; // Used by renderings that are bound to Template fields
+    // const renderingFields = props.rendering?.fields; // Used by renderings that are bound to a Datasource fields
 
     const renderingFields = {
 """ + process_values_rendering_fields(values) + """
@@ -66,11 +69,13 @@ export const Default = (props: """ + name + """Props): JSX.Element => {
     return (
         &lt;ComponentContent
             id={id ? id : ''}
-            mode={sitecoreContext.pageEditing === false ? '' : 'edit'}
+            mode={sitecoreContext.pageEditing === false ? '' : 'edit'}[hook_component_return]
 """ + process_values_component_parameters(values) + """
         /&gt;
     );    
-};     
+};
+
+[hook_with_check]     
                 </code>
             </pre>            
         </div>
@@ -95,4 +100,41 @@ gql`
                 </code>
             </pre>            
         </div>    
-    """        
+    """
+    
+    if hook == "1":
+        text_definition = """
+export const getStaticProps: GetStaticComponentProps = async (rendering, layoutData) => {    
+    console.log(rendering, layoutData);
+    //const item = await getItemByDatasource(rendering.dataSource as string);
+
+    //return item;
+};
+    """
+
+        component_prop = """
+    item: Item;"""
+    
+        component_return = """
+            item={externalData as Item}"""
+        
+        external_definition = """const externalData = useComponentProps&lt;Item&gt;(props.rendering.uid);
+        """
+        
+        text = text.replace("[hook_import1]", " GetStaticComponentProps, Item,")
+        text = text.replace("[hook_import2]", ", useComponentProps, withDatasourceCheck")
+        text = text.replace("[hook_component_prop]", component_prop)
+        text = text.replace("[hook_definition_external]", external_definition)
+        text = text.replace("[hook_definition]", text_definition)
+        text = text.replace("[hook_component_return]", component_return)
+        text = text.replace("[hook_with_check]", "export default withDatasourceCheck()&lt;" + name + "Props&gt;(Default);")
+    else:
+        text = text.replace("[hook_import1]", "")
+        text = text.replace("[hook_import2]", "")
+        text = text.replace("[hook_component_prop]", "")
+        text = text.replace("[hook_definition_external]", "")
+        text = text.replace("[hook_definition]", "")
+        text = text.replace("[hook_component_return]", "")
+        text = text.replace("[hook_with_check]", "")
+    
+    return text        
