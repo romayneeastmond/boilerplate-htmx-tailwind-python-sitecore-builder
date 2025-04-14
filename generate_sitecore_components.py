@@ -117,6 +117,8 @@ export const getStaticProps: GetStaticComponentProps = async (rendering, layoutD
     //const item = await getItemByDatasource(rendering.dataSource as string);
 
     //return item;
+    
+    return null;    
 };
     """
 
