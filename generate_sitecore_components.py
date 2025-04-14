@@ -35,7 +35,7 @@ type ComponentContentProps = {
     children?: JSX.Element;[hook_component_prop]
 """ + process_values_props(values) + """
 }
-
+[hook_definition]
 const ComponentContent = (props: ComponentContentProps): JSX.Element => {
     return (
         &lt;div className='border m-4 p-4'&gt;
@@ -43,7 +43,7 @@ const ComponentContent = (props: ComponentContentProps): JSX.Element => {
         &lt;/div&gt;
     );
 };
-[hook_definition]
+
 export const Default = (props: """ + name + """Props): JSX.Element => {
     const { sitecoreContext } = useSitecoreContext();
     [hook_definition_external]
