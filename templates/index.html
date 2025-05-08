@@ -104,6 +104,25 @@
         .dark .hljs-code {
             color: #5fb23b;
         }
+
+        .scrollable {
+            scrollbar-width: thin;
+            scrollbar-color: #9ca3af transparent;
+        }
+
+        .scrollable::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .scrollable::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollable::-webkit-scrollbar-thumb {
+            background-color: #f4f4f4;
+            border-radius: 4px;
+        }
     </style>
 </head>
 
@@ -182,6 +201,12 @@
                             <dl class="mb-4">
                                 <dt class="font-bold">File rendering</dt>
                                 <dd class="text-gray-500 dark:text-gray-400">object, pdf, Pdf, File</dd>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl class="mb-4">
+                                <dt class="font-bold">Route</dt>
+                                <dd class="text-gray-500 dark:text-gray-400">Item, itemName, Item, Route</dd>
                             </dl>
                         </li>
                         <li>

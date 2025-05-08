@@ -1,4 +1,6 @@
 from process_form_values import process_values_props
+from process_form_values import process_values_route_consoles
+from process_form_values import process_values_route_fields
 from process_form_values import process_values_rendering_fields
 from process_form_values import process_values_rendering_fields_declarations
 from process_form_values import process_values_component_parameters
@@ -17,26 +19,26 @@ def get_sitecore_components(name, values, hook):
             </button>            
             
             <pre id="response-component" class="-mb-7 -mt-4 px-4">
-                <code class="typescript">
+                <code class="scrollable typescript">
 import React from 'react';
 import { 
-    ComponentParams, ComponentRendering, DateField, File, FileField,[hook_import1] Image, Link, LinkField, Text, TextField, 
+    ComponentParams, ComponentRendering, DateField, Item, File, FileField,[hook_import1] Image, Link, LinkField, Text, TextField, 
     RichText, RichTextField, useSitecoreContext[hook_import2] 
 } from '@sitecore-jss/sitecore-jss-nextjs';
 
 type """ + name + """Props = {
     rendering: ComponentRendering & { params: ComponentParams };
     params: ComponentParams;
-}
+};
 
 type ComponentContentProps = {
     id: string;
     mode?: string;
     children?: JSX.Element;[hook_component_prop]
 """ + process_values_props(values) + """
-}
+};
 [hook_definition]
-const ComponentContent = (props: ComponentContentProps): JSX.Element => {
+const ComponentContent = (props: ComponentContentProps): JSX.Element => {""" + process_values_route_consoles(values) + """    
     return (
         &lt;div className='border m-4 p-4'&gt;
 """ + process_values_sitecore_renderings(values) + """
@@ -58,7 +60,7 @@ export const Default = (props: """ + name + """Props): JSX.Element => {
     
     const id = props.rendering?.uid;
     const fields = sitecoreContext?.route?.fields; 
-    
+""" + process_values_route_fields(values) + """
     // const contextFields = sitecoreContext?.route?.fields; // Used by renderings that are bound to Template fields
     // const renderingFields = props.rendering?.fields; // Used by renderings that are bound to a Datasource fields
 
@@ -126,12 +128,12 @@ export const getStaticProps: GetStaticComponentProps = async (rendering, layoutD
     item: Item;"""
     
         component_return = """
-            item={externalData as Item}"""
+            item={renderingItem as Item}"""
         
-        external_definition = """const externalData = useComponentProps&lt;Item&gt;(props.rendering.uid);
+        external_definition = """const renderingItem = useComponentProps&lt;Item&gt;(props.rendering.uid);
         """
         
-        text = text.replace("[hook_import1]", " GetStaticComponentProps, Item,")
+        text = text.replace("[hook_import1]", " GetStaticComponentProps,")
         text = text.replace("[hook_import2]", ", useComponentProps, withDatasourceCheck")
         text = text.replace("[hook_component_prop]", component_prop)
         text = text.replace("[hook_definition_external]", external_definition)
