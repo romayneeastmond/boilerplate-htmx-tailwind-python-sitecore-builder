@@ -34,9 +34,3 @@ Provide a component name for the fields and then seperate each field definition 
 ## Copyright and Ownership
 
 All terms used are copyright to their original authors.
-
-## Live Demo
-
-Live demo hosted in Microsoft Azure App Service [Boilerplate Sitecore XM Cloud Component Builder](https://dev-python-boilerplate-sitecore.azurewebsites.net/).
-
-Azure F1 instances are :snowflake: ice cold. That first load will need some :sun_with_face: warming up.
